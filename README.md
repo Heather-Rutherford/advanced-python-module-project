@@ -1,194 +1,92 @@
-🧙‍♂️ Hero vs. Evil Wizard – OOP Battle Game (Python)
-📖 Introduction
+## Advanced Python Module Project: Defeat the Evil Wizard
+
+## Overview
+
 Hero vs. Evil Wizard is a mini turn-based battle game built with Python to practice Object-Oriented Programming (OOP) concepts. Players create and control a hero character to battle a powerful Evil Wizard using attacks, special abilities, and healing mechanics.
 The project emphasizes inheritance, class interactions, game logic design, and user interaction through a simple menu-driven system.
 
-📚 Table of Contents
+## Requirements
 
-Introduction
+- Python 3.7 or higher
 
-Learning Objectives
+## Installation
 
-Features
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Heather-Rutherford/advanced-python-module-project.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd advanced-python-module-project
+   ```
 
-Project Requirements
+## Running the Application
 
-Character Classes
+Run the application using Python:
 
-Installation
+```bash
+python defeat-the-evil-wizard.py
+```
 
-Usage
+## How to Play
 
-Game Mechanics
+### Character Selection
 
-Examples
+When you start the game, you'll choose from 4 character classes:
 
-Troubleshooting
+1. **Warrior** - High health (140 HP), moderate attack (25 damage)
 
-Future Enhancements
+   - Best for: Beginners, defensive playstyle
+   - Special abilities: None
 
-Contributors
+2. **Mage** - Low health (100 HP), high attack (35 damage)
 
-License
+   - Best for: Aggressive playstyle, quick battles
+   - Special abilities: None
 
-🎯 Learning Objectives
+3. **Archer** - Medium health (120 HP), variable attack (25-35 damage)
 
-Apply OOP principles such as inheritance, methods, and encapsulation
+   - Best for: Strategic players
+   - Special abilities:
+     - **Quick Shot**: Attack twice in one turn
+     - **Evade**: Dodge the wizard's next attack
+   - Can heal: 20 HP per turn
 
-Build an interactive, menu-driven Python program
+4. **Paladin** - Highest health (160 HP), variable attack (17-27 damage)
+   - Best for: Defensive and support playstyle
+   - Special abilities:
+     - **Holy Strike**: Deal bonus damage (35 total)
+     - **Divine Shield**: Block the wizard's next attack
+   - Can heal: 25 HP per turn
 
-Design turn-based combat logic
+### Battle System
 
-Implement randomness and state-based mechanics (health, shields, evasion)
+Each turn, you have 4 options:
 
-✨ Features
+1. **Attack** - Deal damage to the Evil Wizard
+2. **Use Special Ability** - Use class-specific abilities (Archer/Paladin only)
+3. **Heal** - Restore health (Archer/Paladin only)
+4. **View Stats** - Check your current health and attack power
 
-Four playable character classes
+### The Evil Wizard
 
-Two unique abilities per character
+- Health: 150 HP
+- Attack: 15 damage per turn
+- Special ability: Regenerates 5 HP every turn
 
-Turn-based battle system
+### Victory Conditions
 
-Randomized attack damage
+- **You win** if you reduce the wizard's health to 0
+- **You lose** if your health reaches 0
 
-Healing mechanics with max health limits
+### Strategy Tips
 
-Evil Wizard AI with regeneration
+- The wizard regenerates 5 HP per turn, so deal damage faster than he heals
+- Use Archer's Evade or Paladin's Divine Shield to avoid damage during critical moments
+- Time your healing to maximize survivability
+- Paladin's Holy Strike deals massive damage - use it strategically
 
-Victory and defeat conditions
+## License
 
-📋 Project Requirements
-✔ Four character classes
-✔ Two unique abilities per character
-✔ Healing mechanic
-✔ Randomized attack damage
-✔ Turn-based menu system
-✔ Evil Wizard attack & regeneration logic
-✔ End-game victory/defeat messages
-
-🧝 Character Classes
-⚔️ Warrior
-A strong melee fighter with high durability.
-
-Power Strike – Deals bonus damage
-
-Battle Cry – Increases attack power temporarily
-
-🔮 Mage
-A magic-based damage dealer.
-
-Fireball – High magic damage
-
-Mana Shield – Reduces incoming damage
-
-🏹 Archer
-A fast ranged attacker who relies on agility.
-
-Quick Shot – Fires two arrows in one turn
-
-Evade – Avoids the next incoming attack
-
-🛡️ Paladin
-A defensive hero with healing abilities.
-
-Holy Strike – Deals bonus holy damage
-
-Divine Shield – Blocks the next attack completely
-
-⚙️ Installation
-Prerequisites
-
-Python 3.8 or higher
-
-No external libraries required
-
-Steps
-git clone <your-repository-url>
-cd hero-vs-evil-wizard
-python main.py
-
-▶️ Usage
-
-Run the Python script.
-
-Choose your character class.
-
-Each turn, select an action:
-
-Attack
-
-Use Special Ability
-
-Heal
-
-View Stats
-
-Defeat the Evil Wizard before your health reaches zero.
-
-🕹️ Game Mechanics
-🔁 Turn-Based System
-
-Player acts first
-
-Evil Wizard responds after each player turn
-
-❤️ Healing
-
-Restores health
-
-Cannot exceed maximum HP
-
-🎲 Random Damage
-
-Attacks deal damage within a predefined range
-
-Adds unpredictability to combat
-
-🧙 Evil Wizard Logic
-
-Attacks every turn
-
-Regenerates health automatically
-
-Wins if the player’s HP reaches zero
-
-📌 Example Gameplay Flow
-Choose an action:
-
-1. Attack
-2. Use Ability
-3. Heal
-4. View Stats
-
-Outcome Messages
-
-🏆 Victory! – You have defeated the Evil Wizard!
-
-☠️ Defeat! – The Evil Wizard has overwhelmed you.
-
-🛠️ Troubleshooting
-
-Game crashes on input → Ensure valid menu choices are entered
-
-Health exceeds max HP → Verify heal() method caps health
-
-Abilities not triggering → Check method calls and class inheritance
-
-🚀 Future Enhancements (Bonus Ideas)
-
-Additional character classes (Rogue, Necromancer, Berserker)
-
-Advanced Evil Wizard abilities (summoning minions, curses)
-
-Critical hits and status effects
-
-Save/load game progress
-
-Graphical UI (Tkinter or Pygame)
-
-👥 Contributors
-Your Name Here
-
-📄 License
 This project is licensed under the MIT License.
 Feel free to use, modify, and distribute for educational purposes.
