@@ -35,15 +35,17 @@ class Character:
         self.name: str = name
         self.health: int = health
         self.attack_power: int = attack_power
-        self.max_health: int = health
-        self.is_evading: bool = False # Evasion status
-        self.is_shielded: bool = False # Divine Shield status
-        self.heal_amount: int = 0  # Default heal amount
+        self.max_health: int = health  # Track original max for healing cap
+        # Defense flags - set to True when abilities are activated
+        self.is_evading: bool = False  # Archer's evasion ability
+        self.is_shielded: bool = False  # Paladin's divine shield ability
+        self.heal_amount: int = 0  # Default 0; Archer=20, Paladin=25
 
     def attack(self, opponent: 'Character') -> None:
         """Attack an opponent, reducing their health."""
+        # Check if opponent has active defenses (evasion/shield) before attacking
         if self._check_defenses(opponent):
-            return
+            return  # Attack was blocked, exit early
         opponent.health -= self.attack_power
         print(f"{self.name} attacks {opponent.name} for {self.attack_power} damage!")
         if opponent.health <= 0:
@@ -52,21 +54,26 @@ class Character:
     def heal(self) -> None:
         """Heal the character, restoring health but not exceeding max health."""
         self.health += self.heal_amount
+        # Cap health at max to prevent over-healing
         if self.health > self.max_health:
             self.health = self.max_health
         print(f"{self.name} heals for {self.heal_amount} health! Current health: {self.health}")
 
     def _check_defenses(self, opponent: 'Character') -> bool:
-        """Check if opponent has active defenses and handle them."""
+        """Check if opponent has active defenses and handle them.
+        
+        Returns True if attack was blocked, False if attack should proceed.
+        Resets defense flags after use (single-use abilities).
+        """
         if opponent.is_evading:
             print(f"{opponent.name} evaded the attack!")
-            opponent.is_evading = False
+            opponent.is_evading = False  # Reset after dodging one attack
             return True
         if opponent.is_shielded:
             print(f"{opponent.name}'s Divine Shield blocks the attack!")
-            opponent.is_shielded = False
+            opponent.is_shielded = False  # Reset after blocking one attack
             return True
-        return False
+        return False  # No defenses active, attack proceeds
 
     def display_stats(self) -> None:
         """Display the character's current stats."""
@@ -105,6 +112,7 @@ class Archer(Character):
     def attack(self, opponent: 'Character') -> None:
         if self._check_defenses(opponent):
             return
+        # Archer has variable damage: 30±5 = 25-35 damage
         damage = random.randint(self.attack_power - ARCHER_DAMAGE_MIN_VARIANCE, self.attack_power + ARCHER_DAMAGE_MAX_VARIANCE)
         opponent.health -= damage
         print(f"{self.name} shoots an arrow at {opponent.name} for {damage} damage!")
@@ -114,6 +122,7 @@ class Archer(Character):
     def quick_shot(self, opponent: 'Character') -> None:
         """Perform a quick shot that hits twice."""
         self.attack(opponent)
+        # Only shoot second arrow if opponent is still alive
         if opponent.health > 0:
             self.attack(opponent)
             
@@ -132,6 +141,7 @@ class Paladin(Character):
     def attack(self, opponent: 'Character') -> None:
         if self._check_defenses(opponent):
             return
+        # Paladin has variable damage: 20±3-7 = 17-27 damage
         damage = random.randint(self.attack_power - PALADIN_DAMAGE_MIN_VARIANCE, self.attack_power + PALADIN_DAMAGE_MAX_VARIANCE)
         opponent.health -= damage
         print(f"{self.name} strikes {opponent.name} for {damage} damage!")
@@ -142,6 +152,7 @@ class Paladin(Character):
         """Perform a holy strike that deals bonus damage."""
         if self._check_defenses(opponent):
             return
+        # Holy Strike adds +15 bonus damage (20 base + 15 = 35 total)
         bonus_damage = PALADIN_HOLY_STRIKE_BONUS
         total_damage = self.attack_power + bonus_damage
         opponent.health -= total_damage
@@ -162,17 +173,17 @@ def create_character() -> Union[Warrior, Mage, Archer, Paladin]:
     print("3. Archer") 
     print("4. Paladin")  
 
-    # Validate class choice
+    # Validate class choice - loop until valid input received
     while True:
         class_choice = input("Enter the number of your class choice: ").strip()
         if class_choice in ['1', '2', '3', '4']:
-            break
+            break  # Valid choice, exit loop
         print("Invalid choice. Please enter 1, 2, 3, or 4.")
     
-    # Validate name
+    # Validate name - ensure it's not empty or just whitespace
     while True:
         name = input("Enter your character's name: ").strip()
-        if name:  # Check if name is not empty
+        if name:  # Truthy check - rejects empty strings
             break
         print("Name cannot be empty. Please enter a valid name.")
 
@@ -204,11 +215,11 @@ def battle(player: Character, wizard: EvilWizard) -> None:
 
         if choice not in ['1', '2', '3', '4']:
             print("Invalid choice. Please enter 1, 2, 3, or 4.")
-            continue  # Don't consume the turn, ask again
+            continue  # Don't consume turn or trigger wizard's turn - re-prompt
 
         if choice == '1':
             player.attack(wizard)
-        elif choice == '2':
+        elif choice == '2':  # Special abilities vary by class
             if isinstance(player, Archer):
                 print("\nSpecial Abilities:")
                 print("1. Quick Shot")
@@ -236,28 +247,33 @@ def battle(player: Character, wizard: EvilWizard) -> None:
             else:
                 print("No special ability available for your class yet.")
         elif choice == '3':
+            # Only classes with heal_amount > 0 can heal (Archer=20, Paladin=25)
             if player.heal_amount > 0:
                 player.heal()
             else:
-                print("Your class cannot heal.")
+                print("Your class cannot heal.")  # Warrior/Mage
         elif choice == '4':
             player.display_stats()
 
+        # Wizard's turn - only if still alive after player's action
         if wizard.health > 0:
-            wizard.regenerate()
+            wizard.regenerate()  # Wizard regenerates 5 HP every turn
             wizard.attack(player)
 
+        # Check for player defeat after wizard's turn
         if player.health <= 0:
             print(f"{player.name} has been defeated!")
-            break
+            break  # Exit battle loop
 
+    # Display victory message if wizard was defeated (not player)
     if wizard.health <= 0:
         print(f"The wizard {wizard.name} has been defeated by {player.name}!")
 
 def main() -> None:
-    player = create_character()
-    wizard = EvilWizard("The Dark Wizard")
-    battle(player, wizard)
+    """Main game entry point - sets up and runs the battle."""
+    player = create_character()  # User chooses and creates their character
+    wizard = EvilWizard("The Dark Wizard")  # Create the enemy
+    battle(player, wizard)  # Start the turn-based battle
 
 if __name__ == "__main__":
     main()
